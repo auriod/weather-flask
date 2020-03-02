@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+{% block content %}
+    {% if not session.logged_in %}
+    <div>
+        <h2>Пожалуйста, введите данные пользователя</h2>
+        <form method="post" action="{{ url_for('auth.register') }}" id="form-add-pay">
+            <p>Имя:</p><input type="text" name="first_name"><br>
+            <p>Фамилия:</p><input type="text" name="last_name"><br>
+            <p>Дата рождения:</p><input type="date" name="birsday"><br>
+            <p>Email:</p><input type="email" name="email">
+            <button type="submit" class="add-btn">Регистрация</button>
+        </form>
+    </div>
+    {% else %}
+        <h2>Здравствуйте, {{ session.user }}</h2>
+        <h3>Добро пожаловать на наш сайт</h3>
+    {% endif %}
+{% endblock %}

@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+{% block content %}
+    <h2>наши отзывы:</h2>
+    {% for feedback in feedback_list %}
+
+    <h3>Пользователь: {{ feedback[0] }}</h3>
+    <h4>Email {{ feedback[1] }}</h4>
+    <p>Сообщение: {{ feedback[2] }}</p>
+    {% endfor %}
+
+{% endblock %}

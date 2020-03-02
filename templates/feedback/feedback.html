@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+{% block content %}
+    <h2>Форма обратной связи</h2>
+
+    <form method="post" action="{{ url_for('feedback.feedback_add') }}" id="form-add-pay">
+        <p>Имя:</p><input type="text" name="name"><br>
+        <p>Email:</p><input type="email" name="email">
+        <p>Сообщение</p><textarea name="text" cols="20" rows="3"></textarea><br>
+        <button type="submit" class="add-btn">Регистрация</button>
+    </form>
+
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            <ul>
+                {% for message in messages %}
+                <li>{{ message }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+    {% endwith %}
+
+{% endblock %}
