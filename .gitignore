@@ -1,0 +1,5 @@
+__pycache__/
+weather/__pycache__/
+feedback/__pycache__/
+auth/__pycache__/
+*.py[cod]

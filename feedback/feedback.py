@@ -9,8 +9,9 @@ from flask import url_for
 from flask import Blueprint
 from jinja2 import TemplateNotFound
 
+from db import get_db
+
 TEMPLATES_DIR = 'feedback/'
-feedback_list = []
 
 feedback_page = Blueprint('feedback', __name__, 
                      template_folder='templates', url_prefix='/feedback')
@@ -24,20 +25,41 @@ def feedback():
 
 @feedback_page.route('/add', methods=['POST'])
 def feedback_add():
-    global feedback_list
+
+    def return_with_message(message):
+        """Возвращает к странице ввода сообщения c сообщением"""
+        flash(message)
+        return redirect(url_for('feedback.feedback'))
+
     if request.method == 'POST':
+        db = get_db()
+
         name = request.form['name']
         email = request.form['email']
         text = request.form['text']
-        feedback_list.append([name, email, text])
-        message = "Сообщение отправлено"
-        flash(message)
+
+    if not name:
+        flash("Введите имя")
+    elif not email:
+        flash("Введите email")
+    elif not text:
+        flash("Введите текст сообщения")
+    else:
+        try:
+            db.add_new_feedback((name, email, text))
+        except:
+            flash('Ошибка. Попробуйте еще раз')
+        else: 
+            flash('Сообщение отправлено!')
+    
     return redirect(url_for('feedback.feedback'))
 
 
 @feedback_page.route('/list')
 def feedback_list_show():
     # собрать с БД все отзывы - сохранить в переменнную отправить в шаблон
+    db = get_db()
+    feedback_list = db.get_list_feedback()
     if session['logged_in']:
         return render_template(TEMPLATES_DIR + 'feedback_list.html', feedback_list=feedback_list)
     else:

@@ -3,9 +3,8 @@
     <h2>наши отзывы:</h2>
     {% for feedback in feedback_list %}
 
-    <h3>Пользователь: {{ feedback[0] }}</h3>
-    <h4>Email {{ feedback[1] }}</h4>
-    <p>Сообщение: {{ feedback[2] }}</p>
+    <h3>Сообщение: {{ feedback[1] }}</h3>
+    <p>Пользователь: {{ feedback[0] }}</p>
     {% endfor %}
 
 {% endblock %}

@@ -11,6 +11,8 @@ from flask import url_for
 from werkzeug.security import check_password_hash
 from werkzeug.security import generate_password_hash
 
+from db import get_db
+
 auth_page = Blueprint("auth", __name__, url_prefix="/auth")
 '''
 
@@ -25,96 +27,56 @@ def login_required(view):
         return view(**kwargs)
 
     return wrapped_view
+''' 
 
 
-@bp.before_app_request
-def load_logged_in_user():
-    """If a user id is stored in the session, load the user object from
-    the database into ``g.user``."""
-    user_id = session.get("user_id")
-
-    if user_id is None:
-        g.user = None
-    else:
-        g.user = (
-            get_db().execute("SELECT * FROM user WHERE id = ?", (user_id,)).fetchone()
-        )
-'''
 # регистрация нового пользователя
 @auth_page.route("/register", methods=("GET", "POST"))
 def register():
 
+    # !!! ДОДЕЛАТЬ ВАЛИДАЦИЮ
+
     if request.method == "POST":
-        first_name = request.form["first_name"]
-        last_name = request.form["last_name"]
+        db = get_db()
+        message = None
+
+        first_name = request.form["first_name"].strip()
+        last_name = request.form["last_name"].strip()
         birsday = request.form["birsday"]
-        email = request.form["email"]
+        email = request.form["email"].strip()
+        gender = request.form['gender']
 
+        # if not birsday: birsday = 'NULL'
+        # if not birsday: birsday = 'NULL'
+
+        if not first_name:
+            message = "Введите имя"
+        if not last_name:
+            message = "Введите фамилию"
+        if not email:
+            message = "Введите email"
+        if not birsday:
+            birsday = None
+        if not gender:
+            gender = None
+        
+        # if message is not None:
+        #     flash(message)
+        #     return redirect(url_for('index'))
+        
+        # проверка наличия введенного email в БД
+        # если email есть, Пользователь считается зарестрированным
+        if not db.is_exist_email(email):
+            try:
+                db.add_new_user((first_name, last_name, email, gender, birsday))
+                # session['data'] = (first_name, last_name, email, gender, birsday, repr(type(birsday)))
+            except Exception as err:
+                flash(repr(err))
+                return redirect(url_for('index'))
+        
+            
+               
         session['logged_in'] = True
-
         session['user'] = first_name + ' ' + last_name
 
-        '''
-        db = get_db()
-        error = None
-
-        if not username:
-            error = "Username is required."
-        elif not password:
-            error = "Password is required."
-        elif (
-            db.execute("SELECT id FROM user WHERE username = ?", (username,)).fetchone()
-            is not None
-        ):
-            error = "User {0} is already registered.".format(username)
-
-        if error is None:
-            # the name is available, store it in the database and go to
-            # the login page
-            db.execute(
-                "INSERT INTO user (username, password) VALUES (?, ?)",
-                (username, generate_password_hash(password)),
-            )
-            db.commit()
-            return redirect(url_for("auth.login"))
-
-        flash(error)
-        '''
-
         return redirect(url_for('index'))
-'''
-# вход в аккаунт
-@bp.route("/login", methods=("GET", "POST"))
-def login():
-    """Log in a registered user by adding the user id to the session."""
-    if request.method == "POST":
-        username = request.form["username"]
-        password = request.form["password"]
-        db = get_db()
-        error = None
-        user = db.execute(
-            "SELECT * FROM user WHERE username = ?", (username,)
-        ).fetchone()
-
-        if user is None:
-            error = "Incorrect username."
-        elif not check_password_hash(user["password"], password):
-            error = "Incorrect password."
-
-        if error is None:
-            # store the user id in a new session and return to the index
-            session.clear()
-            session["user_id"] = user["id"]
-            return redirect(url_for("index"))
-
-        flash(error)
-
-    return render_template("auth/login.html")
-
-# выход из аккаунта
-@bp.route("/logout")
-def logout():
-    """Clear the current session, including the stored user id."""
-    session.clear()
-    return redirect(url_for("index"))
-'''

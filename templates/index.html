@@ -4,15 +4,35 @@
     <div>
         <h2>Пожалуйста, введите данные пользователя</h2>
         <form method="post" action="{{ url_for('auth.register') }}" id="form-add-pay">
+            {% with messages = get_flashed_messages() %}
+                {% if messages %}
+                        {% for message in messages %}
+                        <p>{{ message }}</p>
+                        {% endfor %}
+                {% endif %}
+            {% endwith %}
             <p>Имя:</p><input type="text" name="first_name"><br>
             <p>Фамилия:</p><input type="text" name="last_name"><br>
-            <p>Дата рождения:</p><input type="date" name="birsday"><br>
             <p>Email:</p><input type="email" name="email">
+            <p>Дата рождения:</p><input type="date" name="birsday" value=""><br>
+            <p>Пол:</p><select name="gender">
+                                    <option value=""></option>
+                                    <option value="1">мужчина</option>
+                                    <option value="0">женщина</option>
+                                 </select><br>
             <button type="submit" class="add-btn">Регистрация</button>
         </form>
     </div>
     {% else %}
         <h2>Здравствуйте, {{ session.user }}</h2>
         <h3>Добро пожаловать на наш сайт</h3>
+        <p>Ваши данные:</p> 
+        {% for d in session.data %}
+            <p>{{ d }}</p>
+            <!-- <p>{{ d[1] }}</p>
+            <p>{{ d[2] }}</p>
+            <p>{{ d[3] }}</p>
+            <p>{{ d[4] }}</p> -->
+        {% endfor %}
     {% endif %}
 {% endblock %}

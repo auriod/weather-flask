@@ -6,6 +6,9 @@
 </head>
 <body>
     <h1>Flask Weather</h1>
+    <a href="{{ url_for('feedback.feedback') }}">Обратная связь</a>
+    <a href="{{ url_for('index') }}">Главная</a>
+    <a href="{{ url_for('weather.weather_show') }}">Погода</a>
     {% block content %}{% endblock %}
 </body>
 </html>
