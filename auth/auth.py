@@ -8,26 +8,24 @@ from flask import render_template
 from flask import request
 from flask import session
 from flask import url_for
-from werkzeug.security import check_password_hash
-from werkzeug.security import generate_password_hash
 
 from db import get_db
 
 auth_page = Blueprint("auth", __name__, url_prefix="/auth")
-'''
+
 
 def login_required(view):
-    """View decorator that redirects anonymous users to the login page."""
+    """Декоратор проверяет зарегистрирован ли пользователь"""
 
     @functools.wraps(view)
     def wrapped_view(**kwargs):
-        if g.user is None:
-            return redirect(url_for("auth.login"))
+        if not session['logged_in']:
+            return redirect(url_for("index"))
 
         return view(**kwargs)
 
     return wrapped_view
-''' 
+
 
 
 # регистрация нового пользователя

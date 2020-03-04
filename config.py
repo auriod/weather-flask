@@ -2,6 +2,7 @@
 DEBUG = True
 SECRET_KEY = b'\xe2\xe3=\xb8 )j\xf1\x15\xaa-\xadBHf\x8c\xd4n:\x98\x0eb\x93\x8c'
 
+# DATABASE SETTING
 CONFIG_DATABASE = {
     'user': 'root',
     'password': '47458973',
@@ -9,5 +10,11 @@ CONFIG_DATABASE = {
     'port': '3306',
     'buffered':True,
 }
-
 DATABASE = 'weather_zp_app'
+
+# SPIDER SETTING
+SOURCE_DATA_FILE = 'weather/weather.json'
+SETTING_SPIDER = {
+    "FEED_FORMAT": 'json',
+    "FEED_URI": f'{SOURCE_DATA_FILE}'
+}

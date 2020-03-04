@@ -1,4 +1,9 @@
 {% extends 'base.html' %}
 {% block content %}
     <h2>Здесь отображается погода на текущий день в Запорожье</h2>
+    {% for i in range(1) %}
+        <h2>Температура: {{ weather_data.temperature[i] }}</h2>
+        <h2>Влажность: {{ weather_data.humidity[i] }}</h2>
+        <h2>Давление: {{ weather_data.pressure[i] }}</h2>
+    {% endfor %}
 {% endblock %}
