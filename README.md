@@ -6,13 +6,3 @@ Framework: Flask
 Источник данных: http://www.gismeteo.ua/city/daily/5093/
 
 Парсер: Scrapy;
-
-###  requirements
-##### Python:
-	Flask
-	Scrapy
-	SQLAlchemy
-#### JS
-	JQuery
-#### CSS
-	Bootstrap
