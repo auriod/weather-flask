@@ -15,6 +15,5 @@ DATABASE = 'weather_zp_app'
 # SPIDER SETTING
 SOURCE_DATA_FILE = 'weather/weather.json'
 SETTING_SPIDER = {
-    "FEED_FORMAT": 'json',
-    "FEED_URI": f'{SOURCE_DATA_FILE}'
+    "ITEM_PIPELINES": {"weather.spider.JsonWriterPipeline": 10},
 }

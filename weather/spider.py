@@ -17,7 +17,8 @@
 
 from scrapy import Spider
 from scrapy.crawler import CrawlerProcess
-
+import json
+import config
 
 
 class WeatherSpider(Spider):
@@ -50,16 +51,32 @@ class WeatherSpider(Spider):
                 'precipitation': precipitation,
             }
 
+class JsonWriterPipeline(object):
+
+    def open_spider(self, spider):
+        self.file = open(config.SOURCE_DATA_FILE, 'w')
+
+    def close_spider(self, spider):
+        self.file.close()
+
+    def process_item(self, item, spider):
+        line = json.dumps(dict(item))
+        self.file.write(line)
+        return item
+
 
 
 if __name__ == "__main__":
 
     process = CrawlerProcess(settings={
-        "FEED_FORMAT": 'json',
-        "FEED_URI": 'weather/weather.json'
+        "ITEM_PIPELINES": {"spider.JsonWriterPipeline": 10},
     })
 
     process.crawl(WeatherSpider)
     process.start()
+
+    with open('weather/weather.json', 'r') as source:
+            weather_data = json.load(source)
+    print(weather_data)
 
 

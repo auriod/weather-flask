@@ -1,5 +1,6 @@
 import json
 from threading import Thread
+from multiprocessing import Process
 
 from flask import Flask
 from flask import g
@@ -24,22 +25,25 @@ TEMPLATES_DIR = 'weather/'
 weather_page = Blueprint('weather', __name__, 
                      template_folder='templates', url_prefix='/weather')
 
+@weather_page.before_request
+# процесс для запуска и перезапуска реактора реактора
+def run_reactor():
+    p = Process(target=start_spider)
+    p.start()
+    p.join()
 
+# функция запускает паука
 def start_spider():
-    runner = CrawlerRunner(settings=config.SETTING_SPIDER)
-    d = runner.crawl(WeatherSpider)
-    d.addBoth(lambda _: reactor.stop())
-    reactor.run(installSignalHandlers=False)
+        runner = CrawlerRunner(settings=config.SETTING_SPIDER)
+        d = runner.crawl(WeatherSpider)
+        d.addBoth(lambda _: reactor.stop())
+        reactor.run(installSignalHandlers=False)
 
 
 @weather_page.route('')
 @login_required
 def weather_show():
     weather_data = []
-    #запуск паука
-    spider = Thread(target=start_spider)
-    spider.start()
-    spider.join()
 
     try:
         with open(config.SOURCE_DATA_FILE, 'r') as source:
@@ -47,7 +51,7 @@ def weather_show():
     except FileNotFoundError:
         flash("Ошибка. Данные отсутствуют.")
 
-    return render_template(TEMPLATES_DIR + 'weather.html', weather_data=weather_data[0])
+    return render_template(TEMPLATES_DIR + 'weather.html', weather_data=weather_data)
 
 if __name__ == "__main__":
     with open('weather/weather.json', 'r') as s:
