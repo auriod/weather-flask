@@ -1,9 +1,9 @@
 {% extends 'base.html' %}
 {% block content %}
     {% if not session.logged_in %}
-    <div>
-        <h2>Пожалуйста, введите данные пользователя</h2>
-        <form method="post" action="{{ url_for('auth.register') }}" id="form-add-pay">
+    <div class="container flex-center text-center" id='registration-form-container'>
+        <h3>Зарегистрируйтесь</h3>
+        <form method="post" action="{{ url_for('auth.register') }}" id="registration-form">
             {% with messages = get_flashed_messages() %}
                 {% if messages %}
                         {% for message in messages %}
@@ -11,28 +11,44 @@
                         {% endfor %}
                 {% endif %}
             {% endwith %}
-            <p>Имя:</p><input type="text" name="first_name"><br>
-            <p>Фамилия:</p><input type="text" name="last_name"><br>
-            <p>Email:</p><input type="email" name="email">
-            <p>Дата рождения:</p><input type="date" name="birsday" value=""><br>
-            <p>Пол:</p><select name="gender">
-                                    <option value=""></option>
-                                    <option value="1">мужчина</option>
-                                    <option value="0">женщина</option>
-                                 </select><br>
-            <button type="submit" class="add-btn">Регистрация</button>
+            <div class="form-group">
+                <label for="first_name_form">Имя:</label>
+                <input type="text" class="form-control" id="first_name_form" 
+                       name="first_name" placeholder="Введите имя">
+            </div>
+            <div class="form-group">
+                <label for="last_name_form">Фамилия:</label>
+                <input type="text" class="form-control" id="last_name_form" 
+                       name="last_name" placeholder="Введите фамилию">
+            </div>
+            <div class="form-group">
+                <label for="email_form">Email:</label>
+                <input type="email" class="form-control" id="email_form" 
+                       name="email" placeholder="Введите email">
+            </div>
+            <div class="form-group">
+                <label for="birsday_form">Дата рождения:</label>
+                <input type="date" class="form-control" id="birsday_form" 
+                       name="birsday" placeholder="Введите дату рождения">
+            </div>
+
+            <div class="form-group">
+                <label for="gender_form">Пол:</label>
+                <select name="gender" id="gender_form" class='form-control'>
+                    <option value=""></option>
+                    <option value="1">мужчина</option>
+                    <option value="0">женщина</option>
+                </select>
+            </div>
+            <button type="submit" class="btn btn-primary mb-2 btn-submit">Регистрация</button>
         </form>
     </div>
     {% else %}
-        <h2>Здравствуйте, {{ session.user }}</h2>
-        <h3>Добро пожаловать на наш сайт</h3>
-        <p>Ваши данные:</p> 
-        {% for d in session.data %}
-            <p>{{ d }}</p>
-            <!-- <p>{{ d[1] }}</p>
-            <p>{{ d[2] }}</p>
-            <p>{{ d[3] }}</p>
-            <p>{{ d[4] }}</p> -->
-        {% endfor %}
+        <div class="container flex-center text-center">
+            <div class="say-hellou">
+                <h3>Здравствуйте, <b>{{ session.user }}</b>!</h3>
+                <p>Добро пожаловать на наш сайт!</p>
+            </div>
+        </div>
     {% endif %}
 {% endblock %}

@@ -3,12 +3,32 @@
 <head>
     <meta charset="UTF-8">
     <title>Flask Weather</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.min.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 </head>
 <body>
-    <h1>Flask Weather</h1>
-    <a href="{{ url_for('feedback.feedback') }}">Обратная связь</a>
-    <a href="{{ url_for('index') }}">Главная</a>
-    <a href="{{ url_for('weather.weather_show') }}">Погода</a>
+    <header>
+        <div class="container-fluid" >
+            <div class="navbar" id='navigation'>
+                <a class="navbar-brand" href="{{ url_for('index') }}">FlaskWeather</a>
+                <div class="nav flex-right">
+                    <nav class="nav justify-content-end">
+                        <a class="nav-link" href="{{ url_for('weather.weather_show') }}">Погода</a>
+                        <a class="nav-link" href="{{ url_for('feedback.feedback_list_show') }}">Сообщения</a>
+                    </nav>
+                </div>
+            </div>   
+        </div>
+    </header>
+
     {% block content %}{% endblock %}
+    <footer>
+        <nav class="nav justify-content-center">
+            <a class="nav-link" href="{{ url_for('feedback.feedback') }}">Обратная связь</a>
+        </nav>
+    </footer>
+
+    <script src="{{ url_for('static', filename='js/jquery-3.4.1.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
 </body>
 </html>

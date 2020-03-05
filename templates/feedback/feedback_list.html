@@ -1,10 +1,12 @@
 {% extends 'base.html' %}
 {% block content %}
-    <h2>наши отзывы:</h2>
+    <div class="container text-center feedback-list-container">
+    <p class="h2 feedback-list-title">Ваши сообщения:</p>
     {% for feedback in feedback_list %}
 
-    <h3>Сообщение: {{ feedback[1] }}</h3>
-    <p>Пользователь: {{ feedback[0] }}</p>
+    <p class="h3 text-muted text-left"><em>"{{ feedback[1] }}"</em></p>
+    <p class="small text-left">Пользователь: {{ feedback[0] }}</p>
     {% endfor %}
+    </div>
 
 {% endblock %}

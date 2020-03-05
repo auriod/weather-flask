@@ -35,5 +35,7 @@ def first_function():
 def index():
     with app.app_context():
         return render_template('index.html')
+
+
 if __name__ == "__main__":
     app.run()

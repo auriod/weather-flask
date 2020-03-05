@@ -1,9 +1,50 @@
 {% extends 'base.html' %}
 {% block content %}
-    <h2>Здесь отображается погода на текущий день в Запорожье</h2>
-    {% for i in range(1) %}
-        <h2>Температура: {{ weather_data.temperature[i] }}</h2>
-        <h2>Влажность: {{ weather_data.humidity[i] }}</h2>
-        <h2>Давление: {{ weather_data.pressure[i] }}</h2>
-    {% endfor %}
+    <div class="container text-center">
+    <h2 class="weather-title">Погода в <b>Запорожье</b></h2>
+
+    <table class="table table-bordered">
+        <thead class="thead-dark">
+            <tr>
+                <th scope="col"></th>
+                {% for t in weather_data.time %}
+                <th scope="col">{{ t }}:00</th>
+                {% endfor %}
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <th scope="col">Температура</th>
+                {% for temp in weather_data.temperature %}
+                    <th scope="col">{{ temp }}&degC</th>
+                {% endfor %}
+            </tr>
+            <tr>
+                <th scope="col">Влажность</th>
+                {% for hum in weather_data.humidity %}
+                    <th scope="col">{{ hum }}%</th>
+                {% endfor %}
+            </tr>
+            <tr>
+                <th scope="col">Давление</th>
+                {% for pres in weather_data.pressure %}
+                    <th scope="col">{{ pres }}%</th>
+                {% endfor %}
+            </tr>
+            <tr>
+                <th scope="col">Скорость ветра</th>
+                {% for speed in weather_data.wind_speed %}
+                    <th scope="col">{{ speed }} м/с</th>
+                {% endfor %}
+            </tr>
+            <tr>
+                <th scope="col">Осадки</th>
+                {% for prec in weather_data.precipitation %}
+                    <th scope="col">{{ prec }}</th>
+                {% endfor %}
+            </tr>
+        </tbody>
+    </table>
+    
+    </div>
 {% endblock %}

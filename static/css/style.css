@@ -1,0 +1,65 @@
+header {
+    background-color: darkblue;
+    color: white;
+}
+
+.navbar {
+    background-color: darkblue;
+}
+
+.navbar-brand:hover {
+    color: white;
+}
+
+.nav-link:hover {
+    color: white;
+}
+
+.navbar-brand {
+    color: wheat;
+}
+
+.nav-link {
+    color: wheat;
+}
+
+footer {
+    background-color: darkblue;
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+}
+
+#registration-form-container {
+    padding: 15px;
+    padding-top: 25px;
+    width:25%;
+}
+
+#feedback-form-container {
+    padding: 15px;
+    padding-top: 25px;
+    width:25%;
+}
+
+.btn-submit {
+    background-color: darkblue;
+}
+
+.say-hellou {
+    padding: 15px;
+    padding-top: 25px;
+}
+
+.feedback-list-title {
+    padding: 10px;
+}
+
+.feedback-list-container {
+    width: 50%;
+}
+
+.weather-title {
+    padding: 20px;
+}
