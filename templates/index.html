@@ -7,25 +7,34 @@
             {% with messages = get_flashed_messages() %}
                 {% if messages %}
                         {% for message in messages %}
-                        <p>{{ message }}</p>
+                        <div class="alert alert-warning" role="alert">
+                            {{ message }}
+                        </div>
                         {% endfor %}
                 {% endif %}
             {% endwith %}
+
             <div class="form-group">
                 <label for="first_name_form">Имя:</label>
                 <input type="text" class="form-control" id="first_name_form" 
                        name="first_name" placeholder="Введите имя">
+                <div class="invalid-feedback"></div>
             </div>
+
             <div class="form-group">
                 <label for="last_name_form">Фамилия:</label>
                 <input type="text" class="form-control" id="last_name_form" 
                        name="last_name" placeholder="Введите фамилию">
+                <div class="invalid-feedback"></div>
             </div>
+
             <div class="form-group">
                 <label for="email_form">Email:</label>
                 <input type="email" class="form-control" id="email_form" 
                        name="email" placeholder="Введите email">
+                <div class="invalid-feedback" id="error-email"></div>
             </div>
+            
             <div class="form-group">
                 <label for="birsday_form">Дата рождения:</label>
                 <input type="date" class="form-control" id="birsday_form" 

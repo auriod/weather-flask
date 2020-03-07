@@ -13,17 +13,23 @@
                         {% endfor %}
                 {% endif %}
             {% endwith %}
+
             <div class="form-group">
                 <input type="text" class="form-control" id="feedback_name_form" 
                        name="name" placeholder="Введите имя">
+                <div class="invalid-feedback"></div>
             </div>
+
             <div class="form-group">
                 <input type="email" class="form-control" id="feedback_email_form" 
                        name="email" placeholder="Введите email">
+                <div class="invalid-feedback" id="error-email"></div>
             </div>
+
             <div class="form-group">
                 <label for="message_form">Сообщение:</label>
                 <textarea name="text" id="message_form" cols="30" rows="10" class="form-control"></textarea>
+                <div class="invalid-feedback"></div>
             </div>
             <button type="submit" class="btn btn-primary mb-2 btn-submit">Отправить</button>
         </form>
