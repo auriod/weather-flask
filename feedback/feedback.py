@@ -10,6 +10,8 @@ from flask import Blueprint
 from jinja2 import TemplateNotFound
 
 from db import get_db
+from auth.auth import is_valid_email, is_valid_name
+from auth.auth import login_required
 
 TEMPLATES_DIR = 'feedback/'
 
@@ -18,6 +20,7 @@ feedback_page = Blueprint('feedback', __name__,
 
 
 @feedback_page.route('/')
+@login_required
 def feedback():
     g.feedback_list = []
     return render_template(TEMPLATES_DIR + 'feedback.html')
@@ -26,11 +29,6 @@ def feedback():
 @feedback_page.route('/add', methods=['POST'])
 def feedback_add():
 
-    def return_with_message(message):
-        """Возвращает к странице ввода сообщения c сообщением"""
-        flash(message)
-        return redirect(url_for('feedback.feedback'))
-
     if request.method == 'POST':
         db = get_db()
 
@@ -38,29 +36,27 @@ def feedback_add():
         email = request.form['email']
         text = request.form['text']
 
-    if not name:
-        flash("Введите имя")
-    elif not email:
-        flash("Введите email")
-    elif not text:
-        flash("Введите текст сообщения")
-    else:
-        try:
-            db.add_new_feedback((name, email, text))
-        except:
-            flash('Ошибка. Попробуйте еще раз')
-        else: 
-            flash('Сообщение отправлено!')
+        if not is_valid_name(name):
+            flash("Некорректное имя")
+        elif not is_valid_email(email):
+            flash("Некорректный email")
+        elif not text:
+            flash("Введите текст сообщения")
+        else:
+            try:
+                db.add_new_feedback((name, email, text))
+            except:
+                flash('Ошибка. Попробуйте еще раз')
+            else: 
+                flash('Сообщение отправлено!')
     
     return redirect(url_for('feedback.feedback'))
 
 
 @feedback_page.route('/list')
+@login_required
 def feedback_list_show():
     # собрать с БД все отзывы - сохранить в переменнную отправить в шаблон
     db = get_db()
     feedback_list = db.get_list_feedback()
-    if session['logged_in']:
-        return render_template(TEMPLATES_DIR + 'feedback_list.html', feedback_list=feedback_list)
-    else:
-        return redirect(url_for('index'))
+    return render_template(TEMPLATES_DIR + 'feedback_list.html', feedback_list=feedback_list)
