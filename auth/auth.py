@@ -78,21 +78,23 @@ def register():
             flash(messga)
             return redirect(url_for('index'))
 
-        # проверка наличия введенного email в БД
-        # если email есть, Пользователь считается зарестрированным
-        if not db.is_exist_email(email):
-            try:
-                db.add_new_user((first_name, last_name, email, gender, birsday))
-            except Exception as err:
-                flash(repr(err))
-                return redirect(url_for('index'))
+    # проверка наличия введенного email в БД
+    # если email есть, Пользователь считается зарестрированным
+    if not db.is_exist_email(email):
+        try:
+            id_user = db.add_new_user((first_name, last_name, email, gender, birsday))
+        except Exception as err:
+            flash(repr(err))
+            return redirect(url_for('index'))
+    else:
+        id_user = db.get_data_user(email)[0]
         
             
-               
-        session['logged_in'] = True
-        session['user'] = {
-            'username': ' '.join([last_name, first_name]),
-            'email': email,
-        }
+    session['logged_in'] = True
+    session['user'] = {
+        'username': ' '.join([last_name, first_name]),
+        'email': email,
+        'id': id_user,
+    }
 
-        return redirect(url_for('index'))
+    return redirect(url_for('index'))

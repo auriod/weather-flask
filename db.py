@@ -40,6 +40,7 @@ class DB:
         Добавление нового пользователя в базу данных
         user_data - кортеж с данными о пользователе
         (имя, фамилия, email, пол, дата рождения)
+        Возвращает id нового пользователя
         """
 
         query = """
@@ -48,7 +49,12 @@ class DB:
                 VALUES (%s, %s, %s, %s, %s);
                 """
         self._cursor.execute(query, user_data)
+        
+        self._cursor.execute('SELECT LAST_INSERT_ID();')
+        id = self._cursor.fetchone()[0]
+        
         self._connect.commit()
+        return id
 
 
     def add_new_feedback(self, feedback_data):
@@ -72,7 +78,7 @@ class DB:
         Функция проверяет наличие введенного email в БД
         """
         self._cursor.execute("SELECT id FROM users WHERE email=%s", (email, ))
-        return self._cursor is not None
+        return self._cursor.fetchone() is not None
 
     def get_data_user(self, email):
         """Возвращает кортеж с данными зарегистрированного пользователя"""
@@ -82,7 +88,7 @@ class DB:
 
 
     def get_list_feedback(self):
-        query = "SELECT name, message FROM feedback ORDER BY id DESC LIMIT 10"
+        query = "SELECT id, name, message FROM feedback ORDER BY id DESC LIMIT 10"
         self._cursor.execute(query)
         return self._cursor.fetchall()
 
@@ -107,11 +113,8 @@ def close_db(e=None):
 
 if __name__ == "__main__":
     db = DB()
-    # db.add_new_user(('Константин', "Ефанов", 'kiassdfeef@gmail.con', 1, None))
-    # print(db.get_data_user('kiassdfeef@gmail.con'))
-    # db.add_new_feedback(('Константин', 'fff@email.com', 'Тестовый отзыв для БД'))
-    print(db.is_exist_email('kiefanov1@gmail.com'))
-    for f in db.get_list_feedback():
-        print(f, type(f))
+    print(db.is_exist_email("fed_nina@mail.ru"))
+    # print(db.add_new_user(('Роман', "Верховой", 'rom444a@mail.ru', None, None)))
+    print(db.get_data_user("fed_nina@mail.ru"))
 
 
