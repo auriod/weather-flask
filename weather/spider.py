@@ -15,7 +15,7 @@
 # список значений наличия осадков
 # response.xpath("//div[contains(@class, 'row_precipitation')]//span[contains(@class, 'text_lowercase')]/text()").extract()
 
-from scrapy import Spider
+from scrapy import Spider, Selector
 from scrapy.crawler import CrawlerProcess
 import json
 import config
@@ -39,8 +39,18 @@ class WeatherSpider(Spider):
                 "//div[contains(@class, 'widget__row_humidity')]//div[contains(@class, 'w_humidity_type_')]/text()").extract()
             wind_speed = widget.xpath(
                 "//div[contains(@class, 'row_wind-or-gust')]//span[contains(@class, 'wind_m_s')]/text()").extract()
-            precipitation = widget.xpath(
-                "//div[contains(@class, 'row_precipitation')]//span[contains(@class, 'text_lowercase')]/text()").extract()
+            
+
+            precipitation = []
+            for i, row in enumerate(widget.xpath("//div[contains(@class, 'row_precipitationradius')]/div[@class='widget__item']").getall()):
+                res = Selector(text=row).xpath("//span[contains(@class, 'text_lowercase')]/text()").get()
+                if res is None:
+                    res = Selector(text=row).xpath("//div[contains(@class, 'tooltip')]/text()").get().strip() + ' мм'
+                precipitation.append(res)
+
+
+            # precipitation = widget.xpath(
+            #     "//div[contains(@class, 'row_precipitation')]//span[contains(@class, 'text_lowercase')]/text()").extract()
             
             yield {
                 'time': list(range(2, 24, 3)),
