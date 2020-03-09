@@ -57,7 +57,7 @@ class DB:
         return id
 
 
-    def add_new_feedback(self, feedback_data):
+    def add_new_feedback(self, feedback_data, user_id):
         """
         Добавление нового отзыва в базу данных
         feedback_data - кортеж с данными о пользователе
@@ -70,6 +70,22 @@ class DB:
                 VALUES (%s, %s, %s);
                 """
         self._cursor.execute(query, feedback_data)
+
+        self._cursor.execute('SELECT LAST_INSERT_ID();')
+        id = self._cursor.fetchone()[0]
+        self._connect.commit()
+
+        self._add_relations(user_id, id)
+
+
+    def _add_relations(self, user_id, feedback_id):
+        """Добавление новой связи пользователь-сообщение"""
+        query = """
+                INSERT INTO user_feedback 
+                (user_id, feedback_id)
+                VALUES (%s, %s);
+                """
+        self._cursor.execute(query, (user_id, feedback_id))
         self._connect.commit()
 
 
@@ -113,8 +129,6 @@ def close_db(e=None):
 
 if __name__ == "__main__":
     db = DB()
-    print(db.is_exist_email("fed_nina@mail.ru"))
-    # print(db.add_new_user(('Роман', "Верховой", 'rom444a@mail.ru', None, None)))
-    print(db.get_data_user("fed_nina@mail.ru"))
+    db.test_db()
 
 

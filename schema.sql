@@ -2,6 +2,7 @@ CREATE DATABASE IF NOT EXISTS weather_zp_app;
 
 USE weather_zp_app;
 
+-- таблица с данными пользователей
 CREATE TABLE IF NOT EXISTS users (
 	id INTEGER PRIMARY KEY AUTO_INCREMENT,
 	first_name VARCHAR(30) NOT NULL,
@@ -15,6 +16,7 @@ CREATE TABLE IF NOT EXISTS users (
         (email != ''))
 	);
 
+-- таблица для сообщений
 CREATE TABLE IF NOT EXISTS feedback (
 	id INTEGER PRIMARY KEY AUTO_INCREMENT,
     name VARCHAR(50) NOT NULL,
@@ -25,3 +27,10 @@ CREATE TABLE IF NOT EXISTS feedback (
         (email != '') AND
         (message != ''))
 	);
+
+-- таблица связи пользователь-сообщение
+CREATE TABLE IF NOT EXISTS user_feedback (
+	user_id INTEGER NOT NULL,
+    feedback_id INTEGER NOT NULL
+	);
+
