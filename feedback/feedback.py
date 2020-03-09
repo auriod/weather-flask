@@ -22,13 +22,12 @@ feedback_page = Blueprint('feedback', __name__,
 @feedback_page.route('/')
 @login_required
 def feedback():
-    g.feedback_list = []
     return render_template(TEMPLATES_DIR + 'feedback.html')
 
 
 @feedback_page.route('/add', methods=['POST'])
 def feedback_add():
-
+    """Функция проверяет введенные данные и добавляет новое сообщение в БД"""
     if request.method == 'POST':
         db = get_db()
 
@@ -44,7 +43,7 @@ def feedback_add():
             flash("Введите текст сообщения")
         else:
             try:
-                db.add_new_feedback((name, email, text))
+                db.add_new_feedback((name, email, text), session['user']['id'])
             except:
                 flash('Ошибка. Попробуйте еще раз')
             else: 
@@ -56,7 +55,7 @@ def feedback_add():
 @feedback_page.route('/list')
 @login_required
 def feedback_list_show():
-    # собрать с БД все отзывы - сохранить в переменнную отправить в шаблон
+    """Выводит страницу с последними 10ю сообщениями"""
     db = get_db()
     feedback_list = db.get_list_feedback()
     return render_template(TEMPLATES_DIR + 'feedback_list.html', feedback_list=feedback_list)

@@ -26,23 +26,27 @@ weather_page = Blueprint('weather', __name__,
                      template_folder='templates', url_prefix='/weather')
 
 @weather_page.before_request
-# процесс для запуска и перезапуска реактора реактора
+@login_required
 def run_reactor():
+    """Запуск процесса с пауком"""
     p = Process(target=start_spider)
     p.start()
     p.join()
 
-# функция запускает паука
+
 def start_spider():
-        runner = CrawlerRunner(settings=config.SETTING_SPIDER)
-        d = runner.crawl(WeatherSpider)
-        d.addBoth(lambda _: reactor.stop())
-        reactor.run(installSignalHandlers=False)
+    """Функция запускает реактор с пауком WeatherSpider"""
+    runner = CrawlerRunner(settings=config.SETTING_SPIDER)
+    d = runner.crawl(WeatherSpider)
+    d.addBoth(lambda _: reactor.stop())
+    reactor.run(installSignalHandlers=False)
 
 
 @weather_page.route('')
 @login_required
 def weather_show():
+    """Функция считывает данные с файла weather.json, который формирует паук,
+    и передает шаблону в виде словаря"""
     weather_data = []
 
     try:

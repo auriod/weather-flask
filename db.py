@@ -8,6 +8,7 @@ import config
 
 class DB:
     def __init__(self):
+        """Класс для работы с БД"""
         self._connect = self._connect_mysql()
         if self._connect is not None:
             self._cursor = self._connect.cursor()
@@ -15,7 +16,7 @@ class DB:
     
 
     def _connect_mysql(self):
-        # соединение с сервером MySQL
+        """соединение с сервером MySQL"""
         try:
             cnx = mysql.connector.connect(**config.CONFIG_DATABASE)
         except mysql.connector.Error as err:
@@ -24,6 +25,7 @@ class DB:
 
 
     def _init_db(self):
+        """Инициализация БД из файла schema.sql"""
         try:
             # self._cursor.execute("USE %s", (config.DATABASE, ))  # !!! ERROR 1064(42000): ИМЯ БД ПЕРЕДАЕТСЯ С КАВЫЧКАМИ????
             self._cursor.execute(f"USE {config.DATABASE}")
@@ -110,7 +112,7 @@ class DB:
 
     
     def test_db(self):
-        char = 'U%'
+        """Небольшой тест связи с БД"""
         self._cursor.execute('SHOW TABLES')
         for tables in self._cursor:
             print(tables[0])

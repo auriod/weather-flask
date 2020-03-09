@@ -28,8 +28,6 @@ def first_function():
     # флаг регистрации
     session['logged_in'] = False
 
-
-
 # главная страница
 @app.route('/')
 def index():

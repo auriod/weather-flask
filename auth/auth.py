@@ -49,7 +49,7 @@ def is_valid_bisday(birsday):
 # регистрация нового пользователя
 @auth_page.route("/register", methods=("GET", "POST"))
 def register():
-
+    """Функция регистрации на сайте"""
     if request.method == "POST":
         db = get_db()
         message = None
@@ -60,7 +60,7 @@ def register():
         birsday = request.form["birsday"]
         gender = request.form['gender']
 
-
+        # Валидация данных
         if not is_valid_name(first_name):
             message = "Некорректное имя"
         if not is_valid_name(last_name):
@@ -74,23 +74,26 @@ def register():
         if not gender:
             gender = None
         
+        # Если валидации не пройдена - возвращает на страницу регистрации с сообщением об ошибке
         if message is not None:
             flash(messga)
             return redirect(url_for('index'))
 
     # проверка наличия введенного email в БД
-    # если email есть, Пользователь считается зарестрированным
+    # если email отсутствует, добавляется новый пользователь
     if not db.is_exist_email(email):
         try:
             id_user = db.add_new_user((first_name, last_name, email, gender, birsday))
         except Exception as err:
             flash(repr(err))
             return redirect(url_for('index'))
+    # если введенный email есть, получаем id зарегистрированного пользователя
     else:
         id_user = db.get_data_user(email)[0]
         
-            
+    # Поднимается флаг регистрации пользователя
     session['logged_in'] = True
+    # Формирование данных текущего пользователя 
     session['user'] = {
         'username': ' '.join([last_name, first_name]),
         'email': email,

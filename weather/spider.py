@@ -51,6 +51,7 @@ class WeatherSpider(Spider):
                 'precipitation': precipitation,
             }
 
+"""Запись данных в файл. Данные перезаписуются при каждом запуске паука"""
 class JsonWriterPipeline(object):
 
     def open_spider(self, spider):
