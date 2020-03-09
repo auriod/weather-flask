@@ -1,6 +1,7 @@
 import json
 from threading import Thread
 from multiprocessing import Process
+from datetime import datetime
 
 from flask import Flask
 from flask import g
@@ -48,6 +49,7 @@ def weather_show():
     """Функция считывает данные с файла weather.json, который формирует паук,
     и передает шаблону в виде словаря"""
     weather_data = []
+    date = datetime.today()
 
     try:
         with open(config.SOURCE_DATA_FILE, 'r') as source:
@@ -55,7 +57,7 @@ def weather_show():
     except FileNotFoundError:
         flash("Ошибка. Данные отсутствуют.")
 
-    return render_template(TEMPLATES_DIR + 'weather.html', weather_data=weather_data)
+    return render_template(TEMPLATES_DIR + 'weather.html', weather_data=weather_data, date=date.strftime("%d.%m.%Y"))
 
 if __name__ == "__main__":
     with open('weather/weather.json', 'r') as s:
