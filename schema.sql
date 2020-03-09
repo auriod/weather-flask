@@ -31,6 +31,12 @@ CREATE TABLE IF NOT EXISTS feedback (
 -- таблица связи пользователь-сообщение
 CREATE TABLE IF NOT EXISTS user_feedback (
 	user_id INTEGER NOT NULL,
-    feedback_id INTEGER NOT NULL
+    feedback_id INTEGER NOT NULL,
+    FOREIGN KEY (user_id)
+		REFERENCES users(id)
+        ON DELETE CASCADE,
+	FOREIGN KEY (feedback_id)
+		REFERENCES feedback(id)
+        ON DELETE CASCADE
 	);
 
