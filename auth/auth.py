@@ -76,7 +76,7 @@ def register():
         
         # Если валидации не пройдена - возвращает на страницу регистрации с сообщением об ошибке
         if message is not None:
-            flash(messga)
+            flash(message)
             return redirect(url_for('index'))
 
     # проверка наличия введенного email в БД
